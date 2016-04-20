@@ -25,24 +25,30 @@ metadata {
 
       	}
 
-	tiles {
-		standardTile("switch", "device.switch", width: 1, height: 1, canChangeIcon: true) {
-			state "off", label: '${name}', action: "switch.on", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
-			state "on", label: '${name}', action: "switch.off", icon: "st.switches.switch.on", backgroundColor: "#79b821"
+	tiles (scale: 2){
+		multiAttributeTile(name:"switch", type: "lighting", width: 6, height: 4, canChangeIcon: true){
+			tileAttribute ("device.switch", key: "PRIMARY_CONTROL") {
+				attributeState "on", label:'${name}', action:"switch.off", icon:"st.lights.philips.hue-single", backgroundColor:"#79b821"
+				attributeState "off", label:'${name}', action:"switch.on", icon:"st.lights.philips.hue-single", backgroundColor:"#ffffff"
+			}
+			tileAttribute ("levelSliderControl", key: "SLIDER_CONTROL") {
+				attributeState "level", action:"switch level.setLevel", range:"(0..100)"
+            }
+        //    tileAttribute ("device.level", key: "SECONDARY_CONTROL") {
+	    //        attributeState "level", label: 'Level ${currentValue}%'
+		//	}
+			tileAttribute ("rgbSelector", key: "COLOR_CONTROL") {
+				attributeState "color", action:"setColor"
+			}
 		}
-		standardTile("refresh", "device.switch", inactiveLabel: false, decoration: "flat") {
+     
+		standardTile("refresh", "device.refresh", height: 2, width: 2, inactiveLabel: false, decoration: "flat") {
 			state "default", label:"", action:"refresh.refresh", icon:"st.secondary.refresh"
 		}
-		controlTile("rgbSelector", "device.color", "color",height: 3, width: 3, inactiveLabel: false) {
-			state "color", action:"setColor"
-		}
-		controlTile("levelSliderControl", "device.level", "slider", height: 1, width: 2, inactiveLabel: false) {
-			state "level", action:"switch level.setLevel"
-		}
-
 
 		main(["switch"])
-		details(["switch", "levelSliderControl", "rgbSelector", "refresh"])
+        //details(["switch", "levelSliderControl", "rgbSelector", "refresh"])
+		details(["switch", "levelSliderControl", "refresh"])
 	}
 }
 
